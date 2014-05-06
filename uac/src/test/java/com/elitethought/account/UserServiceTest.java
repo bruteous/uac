@@ -1,8 +1,9 @@
 package com.elitethought.account;
 
 import com.elitethought.entity.Account;
-import com.elitethought.repository.AccountRepository;
+import com.elitethought.repository.UserRepository;
 import com.elitethought.service.UserService;
+import com.elitethought.service.UserServiceImpl;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -13,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 
@@ -24,10 +26,13 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
 
 	@InjectMocks
-	private UserService userService = new UserService();
+	private UserService userService = new UserServiceImpl();
 
 	@Mock
-	private AccountRepository accountRepositoryMock;
+	private UserRepository userRepositoryMock;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -37,7 +42,7 @@ public class UserServiceTest {
 		// act
 		userService.initialize();
 		// assert
-		verify(accountRepositoryMock, times(2)).save(any(Account.class));
+		verify(userRepositoryMock, times(2)).findAccountByEmail(any(String.class));
 	}
 
 	@Test
@@ -46,7 +51,7 @@ public class UserServiceTest {
 		thrown.expect(UsernameNotFoundException.class);
 		thrown.expectMessage("user not found");
 
-		when(accountRepositoryMock.findByEmail("user@example.com")).thenReturn(null);
+		when(userRepositoryMock.findAccountByEmail("user@example.com")).thenReturn(null);
 		// act
 		userService.loadUserByUsername("user@example.com");
 	}
@@ -55,7 +60,7 @@ public class UserServiceTest {
 	public void shouldReturnUserDetails() {
 		// arrange
 		Account demoUser = new Account("user@example.com", "demo", "ROLE_USER");
-		when(accountRepositoryMock.findByEmail("user@example.com")).thenReturn(demoUser);
+		when(userRepositoryMock.findAccountByEmail("user@example.com")).thenReturn(demoUser);
 
 		// act
 		UserDetails userDetails = userService.loadUserByUsername("user@example.com");

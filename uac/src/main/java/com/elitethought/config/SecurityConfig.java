@@ -1,11 +1,13 @@
 package com.elitethought.config;
 
-import org.springframework.context.annotation.*;
+import com.elitethought.service.UserService;
+import com.elitethought.service.UserServiceImpl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
-
-import com.elitethought.service.UserService;
 
 @Configuration
 @ImportResource(value = "classpath:spring-security-context.xml")
@@ -13,7 +15,7 @@ class SecurityConfig {
 	
 	@Bean
 	public UserService userService() {
-		return new UserService();
+		return new UserServiceImpl();
 	}
 
 	@Bean

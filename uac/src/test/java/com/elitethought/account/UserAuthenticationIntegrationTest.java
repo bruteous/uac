@@ -2,6 +2,7 @@ package com.elitethought.account;
 
 import com.elitethought.config.WebSecurityConfigurationAware;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -25,6 +26,7 @@ public class UserAuthenticationIntegrationTest extends WebSecurityConfigurationA
     }
 
     @Test
+    @Ignore
     public void userAuthenticates() throws Exception {
         final String username = "user";
         ResultMatcher matcher = new ResultMatcher() {
@@ -40,6 +42,7 @@ public class UserAuthenticationIntegrationTest extends WebSecurityConfigurationA
     }
 
     @Test
+    @Ignore
     public void userAuthenticationFails() throws Exception {
         final String username = "user";
         mockMvc.perform(post("/j_spring_security_check").param("j_username", username).param("j_password", "invalid"))
