@@ -1,4 +1,4 @@
-package com.elitethought.error;
+package com.elitethought.controller;
 
 import com.google.common.base.Throwables;
 import org.springframework.http.HttpStatus;

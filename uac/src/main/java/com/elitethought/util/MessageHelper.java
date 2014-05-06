@@ -1,9 +1,9 @@
-package com.elitethought.support.web;
+package com.elitethought.util;
 
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import static com.elitethought.support.web.Message.MESSAGE_ATTRIBUTE;
+import static com.elitethought.util.Message.MESSAGE_ATTRIBUTE;
 
 public final class MessageHelper {
 

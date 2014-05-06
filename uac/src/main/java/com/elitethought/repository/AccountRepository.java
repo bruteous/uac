@@ -1,8 +1,9 @@
-package com.elitethought.account;
+package com.elitethought.repository;
 
 import javax.persistence.*;
 import javax.inject.Inject;
 
+import com.elitethought.entity.Account;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;

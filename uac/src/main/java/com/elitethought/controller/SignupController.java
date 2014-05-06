@@ -1,16 +1,18 @@
-package com.elitethought.signup;
+package com.elitethought.controller;
 
 import javax.validation.Valid;
 
+import com.elitethought.entity.Account;
+import com.elitethought.repository.AccountRepository;
+import com.elitethought.service.UserService;
+import com.elitethought.util.MessageHelper;
+import com.elitethought.web.SignupForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.elitethought.account.*;
-import com.elitethought.support.web.*;
 
 @Controller
 public class SignupController {

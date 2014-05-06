@@ -1,4 +1,4 @@
-package com.elitethought.error;
+package com.elitethought.controller;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;

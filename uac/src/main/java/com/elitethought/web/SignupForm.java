@@ -1,8 +1,8 @@
-package com.elitethought.signup;
+package com.elitethought.web;
 
 import org.hibernate.validator.constraints.*;
 
-import com.elitethought.account.Account;
+import com.elitethought.entity.Account;
 
 public class SignupForm {
 

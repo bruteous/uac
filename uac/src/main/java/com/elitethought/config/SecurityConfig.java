@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
-import com.elitethought.account.UserService;
+import com.elitethought.service.UserService;
 
 @Configuration
 @ImportResource(value = "classpath:spring-security-context.xml")

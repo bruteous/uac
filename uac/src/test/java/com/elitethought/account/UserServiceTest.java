@@ -1,5 +1,8 @@
 package com.elitethought.account;
 
+import com.elitethought.entity.Account;
+import com.elitethought.repository.AccountRepository;
+import com.elitethought.service.UserService;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

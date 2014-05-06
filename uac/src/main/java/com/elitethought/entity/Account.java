@@ -1,4 +1,4 @@
-package com.elitethought.account;
+package com.elitethought.entity;
 
 import javax.persistence.*;
 

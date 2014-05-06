@@ -1,4 +1,4 @@
-package com.elitethought.support.web;
+package com.elitethought.util;
 
 /**
  * A message to be displayed in web context. Depending on the type, different style will be applied.

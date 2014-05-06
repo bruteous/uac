@@ -1,7 +1,9 @@
-package com.elitethought.account;
+package com.elitethought.controller;
 
 import java.security.Principal;
 
+import com.elitethought.repository.AccountRepository;
+import com.elitethought.entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
