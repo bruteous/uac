@@ -1,8 +1,10 @@
 package com.elitethought.entity;
 
-import javax.persistence.*;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("serial")
 @Entity
@@ -13,30 +15,46 @@ public class Account implements java.io.Serializable {
 	public static final String FIND_BY_EMAIL = "Account.findByEmail";
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "accountId")
 	private Long id;
 
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String email;
 	
 	@JsonIgnore
+    @Column(nullable = false)
 	private String password;
 
-	private String role = "ROLE_USER";
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="role_account",
+               joinColumns = @JoinColumn(name="roleId"),
+               inverseJoinColumns = @JoinColumn(name="accountId"))
+	private Set<Role> roles = new HashSet<>();
 
     protected Account() {
 
 	}
 	
-	public Account(String email, String password, String role) {
+	public Account(String email, String password, Role role) {
 		this.email = email;
 		this.password = password;
-		this.role = role;
+        this.roles.add(role);
 	}
 
-	public Long getId() {
+    public Account(String email, String password, Set<Role> roles) {
+        this.email=email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public Long getId() {
 		return id;
 	}
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getEmail() {
 		return email;
@@ -54,11 +72,11 @@ public class Account implements java.io.Serializable {
 		this.password = password;
 	}
 
-	public String getRole() {
-		return role;
-	}
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

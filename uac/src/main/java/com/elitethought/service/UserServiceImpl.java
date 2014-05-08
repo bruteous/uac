@@ -1,6 +1,9 @@
 package com.elitethought.service;
 
 import com.elitethought.entity.Account;
+import com.elitethought.entity.Role;
+import com.elitethought.entity.RoleEnum;
+import com.elitethought.repository.RoleRepository;
 import com.elitethought.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,15 +13,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -30,13 +34,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
    	private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
 	@PostConstruct	
 	public void initialize() {
         if (userRepository.findAccountByEmail("user") == null ) {
-            userRepository.save(new Account("user", passwordEncoder.encode("demo"), "ROLE_USER"));
+            userRepository.save(new Account("user", passwordEncoder.encode("demo"), new Role(RoleEnum.ROLE_USER.toString())));
         }
         if (userRepository.findAccountByEmail("admin") == null) {
-            userRepository.save(new Account("admin", passwordEncoder.encode("admin"), "ROLE_ADMIN"));
+            Set<Role> roles = new HashSet<>();
+            roles.add(new Role(RoleEnum.ROLE_ADMIN.toString()));
+            userRepository.save(new Account("admin", passwordEncoder.encode("admin"), roles));
         }
 	}
 	
@@ -54,15 +63,20 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	private Authentication authenticate(Account account) {
-		return new UsernamePasswordAuthenticationToken(createUser(account), null, Collections.singleton(createAuthority(account)));		
+		return new UsernamePasswordAuthenticationToken(createUser(account), null, createAuthority(account));
 	}
 	
 	private User createUser(Account account) {
-		return new User(account.getEmail(), account.getPassword(), Collections.singleton(createAuthority(account)));
+		return new User(account.getEmail(), account.getPassword(), createAuthority(account));
 	}
 
-	private GrantedAuthority createAuthority(Account account) {
-		return new SimpleGrantedAuthority(account.getRole());
+	private Collection<GrantedAuthority> createAuthority(Account account) {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role :  account.getRoles()) {
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName());
+            authorities.add(authority);
+        }
+		return authorities;
 	}
 
     public Account findAccountByEmail(String email) {
@@ -70,6 +84,16 @@ public class UserServiceImpl implements UserService {
     }
 
     public Account save(Account account) {
+        Set<Role> roles = new HashSet<>();
+        for (Role role : account.getRoles()) {
+            Role tmpRole = roleRepository.findRoleByRoleName(role.getRoleName());
+            if ( tmpRole != null) {
+                roles.add(tmpRole);
+            } else {
+                roles.add(role);
+            }
+        }
+        account.setRoles(roles);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return userRepository.save(account);
     }

@@ -1,6 +1,8 @@
 package com.elitethought.account;
 
 import com.elitethought.entity.Account;
+import com.elitethought.entity.Role;
+import com.elitethought.entity.RoleEnum;
 import com.elitethought.repository.UserRepository;
 import com.elitethought.service.UserService;
 import com.elitethought.service.UserServiceImpl;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -59,7 +62,7 @@ public class UserServiceTest {
 	@Test
 	public void shouldReturnUserDetails() {
 		// arrange
-		Account demoUser = new Account("user@example.com", "demo", "ROLE_USER");
+		Account demoUser = new Account("user@example.com", "demo", new Role(RoleEnum.ROLE_USER.toString()));
 		when(userRepositoryMock.findAccountByEmail("user@example.com")).thenReturn(demoUser);
 
 		// act
@@ -68,15 +71,17 @@ public class UserServiceTest {
 		// assert
 		assertThat(demoUser.getEmail()).isEqualTo(userDetails.getUsername());
 		assertThat(demoUser.getPassword()).isEqualTo(userDetails.getPassword());
-        assertThat(hasAuthority(userDetails, demoUser.getRole()));
+        assertThat(hasAuthority(userDetails, demoUser.getRoles()));
 	}
 
-	private boolean hasAuthority(UserDetails userDetails, String role) {
+	private boolean hasAuthority(UserDetails userDetails, Set<Role> roles) {
 		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
 		for(GrantedAuthority authority : authorities) {
-			if(authority.getAuthority().equals(role)) {
-				return true;
-			}
+            for (Role role : roles) {
+                if (authority.getAuthority().equals(role.getRoleName())) {
+                    return true;
+                }
+            }
 		}
 		return false;
 	}

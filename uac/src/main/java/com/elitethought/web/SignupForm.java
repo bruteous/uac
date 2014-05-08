@@ -1,8 +1,10 @@
 package com.elitethought.web;
 
-import org.hibernate.validator.constraints.*;
-
 import com.elitethought.entity.Account;
+import com.elitethought.entity.Role;
+import com.elitethought.entity.RoleEnum;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 public class SignupForm {
 
@@ -33,6 +35,6 @@ public class SignupForm {
 	}
 
 	public Account createAccount() {
-        return new Account(getEmail(), getPassword(), "ROLE_USER");
+        return new Account(getEmail(), getPassword(), new Role(RoleEnum.ROLE_USER.toString()));
 	}
 }
