@@ -11,9 +11,9 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -23,8 +23,9 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 import static org.springframework.context.annotation.ComponentScan.Filter;
 
 @Configuration
+@EnableWebMvc
 @ComponentScan(basePackageClasses = Application.class, includeFilters = @Filter(Controller.class), useDefaultFilters = false)
-class WebMvcConfig extends WebMvcConfigurationSupport {
+class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     private static final String MESSAGE_SOURCE = "/WEB-INF/i18n/messages";
     private static final String VIEWS = "/WEB-INF/views/";
@@ -32,13 +33,13 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     private static final String RESOURCES_HANDLER = "/resources/";
     private static final String RESOURCES_LOCATION = RESOURCES_HANDLER + "**";
 
-    @Override
-    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
-        RequestMappingHandlerMapping requestMappingHandlerMapping = super.requestMappingHandlerMapping();
-        requestMappingHandlerMapping.setUseSuffixPatternMatch(false);
-        requestMappingHandlerMapping.setUseTrailingSlashMatch(false);
-        return requestMappingHandlerMapping;
-    }
+//    @Override
+//    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+//        RequestMappingHandlerMapping requestMappingHandlerMapping = super.requestMappingHandlerMapping();
+//        requestMappingHandlerMapping.setUseSuffixPatternMatch(false);
+//        requestMappingHandlerMapping.setUseTrailingSlashMatch(false);
+//        return requestMappingHandlerMapping;
+//    }
 
     @Bean(name = "messageSource")
     public MessageSource messageSource() {
